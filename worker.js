@@ -96,7 +96,8 @@ async function proxyJson(url, options = {}) {
         upstream_status: response.status,
         upstream_content_type: contentType,
         upstream_final_url: response.url,
-        hint: "Check whether the provider requires approved API access."
+        response_preview: bodyText.slice(0, 250),
+        hint: "The provider may require approved API access or a supported endpoint."
       }, 502);
     }
 
