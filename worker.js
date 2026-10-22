@@ -49,8 +49,6 @@ export default {
       apiUrl.searchParams.set("query", "all");
       apiUrl.searchParams.set("per_page", String(perPage));
       apiUrl.searchParams.set("page", String(page));
-      apiUrl.searchParams.set("thumbsize", "big");
-      apiUrl.searchParams.set("order", "latest");
       apiUrl.searchParams.set("format", "json");
 
       return proxyJson(apiUrl.toString(), {
