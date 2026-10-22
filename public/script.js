@@ -428,3 +428,64 @@ document.addEventListener("keydown", event => {
 loadLiveCams();
 loadVideos();
 setInterval(loadLiveCams, 60000);
+
+// Side menu behaviour
+(() => {
+  const menu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("menuOverlay");
+  const openButton = document.getElementById("menuToggle");
+  const closeButton = document.getElementById("menuClose");
+  const joinButton = document.getElementById("joinToggle");
+  const countryList = document.getElementById("countryList");
+
+  if (!menu || !overlay || !openButton || !closeButton) return;
+
+  function openMenu() {
+    menu.classList.add("open");
+    overlay.classList.add("open");
+    menu.setAttribute("aria-hidden", "false");
+    openButton.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeMenu() {
+    menu.classList.remove("open");
+    overlay.classList.remove("open");
+    menu.setAttribute("aria-hidden", "true");
+    openButton.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+
+  openButton.addEventListener("click", openMenu);
+  closeButton.addEventListener("click", closeMenu);
+  overlay.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeMenu();
+  });
+
+  joinButton?.addEventListener("click", () => {
+    const expanded = joinButton.getAttribute("aria-expanded") === "true";
+    joinButton.setAttribute("aria-expanded", String(!expanded));
+    countryList.hidden = expanded;
+  });
+})();
+// Menu destination links — replace with your real URLs
+const menuLinks = {
+  contact: "https://example.com/contact",
+  channels: "https://example.com/channels",
+  countries: {
+    zambia: "https://example.com/zambia",
+    malawi: "https://example.com/malawi",
+    kenya: "https://example.com/kenya",
+    "south-africa": "https://example.com/south-africa"
+  }
+};
+
+document.getElementById("contactLink").href = menuLinks.contact;
+document.getElementById("channelsLink").href = menuLinks.channels;
+
+document.querySelectorAll(".country-link").forEach(link => {
+  const country = link.dataset.country;
+  link.href = menuLinks.countries[country];
+});
