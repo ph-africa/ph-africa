@@ -176,3 +176,61 @@ h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.5px; }
 .main-nav a.active {
   color: #16a34a;
 }
+
+/* Small numbered video pagination */
+.video-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 18px 0 28px;
+}
+
+.video-page-button {
+  min-width: 25px;
+  height: 25px;
+  padding: 0 5px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  background: #15171c;
+  color: #d9dbe0;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.video-page-button:hover {
+  background: #30343c;
+  color: #fff;
+}
+
+.video-page-button.active {
+  background: #f04452;
+  border-color: #f04452;
+  color: #fff;
+}
+
+.video-page-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.video-page-dots {
+  padding: 0 2px;
+  color: #a4a8b1;
+  font-size: 11px;
+}
+
+@media (max-width: 480px) {
+  .video-pagination {
+    gap: 3px;
+  }
+
+  .video-page-button {
+    min-width: 23px;
+    height: 24px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+}

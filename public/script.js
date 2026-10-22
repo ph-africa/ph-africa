@@ -265,62 +265,142 @@ if (liveNavImage && firstLiveImage) {
   }
 }
 
-async function loadVideos() {
-  if (state.loadingVideos || state.finishedVideos) return;
+
+const TOTAL_VIDEO_PAGES = 125;
+
+function renderVideoPagination() {
+  const pagination = $("videoPagination");
+  if (!pagination) return;
+
+  pagination.replaceChildren();
+
+  const current = state.videoPage;
+  const total = TOTAL_VIDEO_PAGES;
+
+  function addPage(page, label = String(page)) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "video-page-button";
+    button.textContent = label;
+
+    if (page === current) {
+      button.classList.add("active");
+      button.setAttribute("aria-current", "page");
+    }
+
+    button.disabled = state.loadingVideos || page === current;
+
+    button.addEventListener("click", () => {
+      loadVideos(page);
+    });
+
+    pagination.appendChild(button);
+  }
+
+  function addDots() {
+    const dots = document.createElement("span");
+    dots.className = "video-page-dots";
+    dots.textContent = "…";
+    pagination.appendChild(dots);
+  }
+
+  // Previous page
+  if (current > 1) {
+    addPage(current - 1, "‹");
+  }
+
+  // Always show page 1
+  addPage(1);
+
+  let start = Math.max(2, current - 2);
+  let end = Math.min(total - 1, current + 2);
+
+  if (current <= 4) end = Math.min(5, total - 1);
+  if (current >= total - 3) start = Math.max(2, total - 4);
+
+  if (start > 2) addDots();
+
+  for (let page = start; page <= end; page++) {
+    addPage(page);
+  }
+
+  if (end < total - 1) addDots();
+
+  // Always show the last page
+  if (total > 1) addPage(total);
+
+  // Next page
+  if (current < total) {
+    addPage(current + 1, "›");
+  }
+}
+
+async function loadVideos(page = 1) {
+  if (state.loadingVideos) return;
+
   state.loadingVideos = true;
-  const button = $("loadMoreVideos");
-  button.disabled = true;
-  button.textContent = "Loading videos…";
-  setStatus("videoStatus", "Loading videos…");
+  state.videoPage = page;
+
+  const container = $("videoContainer");
+  const pagination = $("videoPagination");
+
+  setStatus("videoStatus", `Loading videos from page ${page}…`);
+
+  if (pagination) renderVideoPagination();
+
   try {
-    const url = new URL(API.videos);
-url.searchParams.set("query", "all");
-url.searchParams.set("page", String(state.videoPage));
-url.searchParams.set("per_page", String(state.perPage));
-url.searchParams.set("format", "json");
-    const response = await fetch(url.toString(), {
-  headers: { "Accept": "application/json" }
-});
-    if (!response.ok) throw new Error(`Video API returned ${response.status}`);
+    const url =
+      `${API.videos}?page=${page}&per_page=${state.perPage}`;
+
+    const response = await fetch(url, {
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Video API returned ${response.status}`);
+    }
+
     const data = await response.json();
+
     const items = Array.isArray(data.videos) ? data.videos
       : Array.isArray(data.results) ? data.results
-      : Array.isArray(data.data) ? data.data : [];
-    const videos = items.map(normaliseVideo).filter(video => video.id || video.embed || video.page);
+      : Array.isArray(data.data) ? data.data
+      : [];
 
-    if (videos.length === 0) {
-      state.finishedVideos = true;
-      setStatus("videoStatus", state.videos.length ? "No more videos." : "No videos were returned by the API.");
-      button.textContent = "No more videos";
-      button.disabled = true;
-      return;
-    }
+    const videos = items
+      .map(normaliseVideo)
+      .filter(video => video.id || video.embed || video.page);
 
-    const container = $("videoContainer");
+    // Replace the previous page instead of adding cards underneath it.
+    container.replaceChildren();
+    state.videos = videos;
+
     videos.forEach(video => {
-      state.videos.push(video);
       container.appendChild(videoCard(video));
     });
-    state.videoPage += 1;
-    const hasMore = data.total_pages ? state.videoPage <= Number(data.total_pages)
-      : videos.length >= state.perPage;
-    if (!hasMore) {
-      state.finishedVideos = true;
-      button.textContent = "No more videos";
+
+    if (videos.length === 0) {
+      setStatus("videoStatus", `No videos found on page ${page}.`);
     } else {
-      button.textContent = "Load more videos ›";
+      setStatus(
+        "videoStatus",
+        `Page ${page} — ${videos.length} videos`
+      );
     }
-    setStatus("videoStatus", `${state.videos.length} videos loaded.`);
+
     applySearch();
   } catch (error) {
     console.error("Unable to load videos:", error);
-    setStatus("videoStatus", "Videos could not be loaded. Check the Worker route and provider response.");
-    button.textContent = "Try again ›";
+    setStatus(
+      "videoStatus",
+      "Videos could not be loaded. Please try another page."
+    );
   } finally {
     state.loadingVideos = false;
-    button.disabled = state.finishedVideos;
+    renderVideoPagination();
   }
 }
+
 
 $("siteSearch").addEventListener("input", applySearch);
 $("clearSearch").addEventListener("click", () => {
@@ -328,7 +408,6 @@ $("clearSearch").addEventListener("click", () => {
   applySearch();
   $("siteSearch").focus();
 });
-$("loadMoreVideos").addEventListener("click", loadVideos);
 $("refreshLive").addEventListener("click", loadLiveCams);
 $("closePlayer").addEventListener("click", closePlayer);
 $("playerModal").addEventListener("click", event => {
