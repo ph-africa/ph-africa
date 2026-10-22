@@ -202,11 +202,12 @@ async function loadLiveCams() {
     if (!response.ok) throw new Error(`Live API returned ${response.status}`);
     const data = await response.json();
     const items = Array.isArray(data) ? data
-      : Array.isArray(data.cams) ? data.cams
-      : Array.isArray(data.models) ? data.models
-      : Array.isArray(data.results) ? data.results
-      : Array.isArray(data.data) ? data.data
-      : Array.isArray(data.camsfeed) ? data.camsfeed : [];
+  : Array.isArray(data.body) ? data.body
+  : Array.isArray(data.cams) ? data.cams
+  : Array.isArray(data.models) ? data.models
+  : Array.isArray(data.results) ? data.results
+  : Array.isArray(data.data) ? data.data
+  : Array.isArray(data.camsfeed) ? data.camsfeed : [];
     state.live = items.map(normaliseCam).filter(cam => cam.username);
     container.replaceChildren();
     state.live.slice(0, 40).forEach(cam => container.appendChild(liveCard(cam)));
