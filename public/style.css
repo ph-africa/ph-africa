@@ -166,3 +166,13 @@ h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.5px; }
     flex-basis: 38px;
   }
 }
+
+/* Hide inactive pages when switching between Videos and Live */
+.page-section.hidden {
+  display: none !important;
+}
+
+/* Keep the selected navigation item visible */
+.main-nav a.active {
+  color: #16a34a;
+}

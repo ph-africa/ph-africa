@@ -192,6 +192,7 @@ function applySearch() {
   }
 }
 
+
 function showPage(page) {
   document.querySelectorAll(".page-section").forEach(section => {
     section.classList.toggle("hidden", section.id !== page);
@@ -209,7 +210,8 @@ function showPage(page) {
     }
   });
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // Start the selected page at the top.
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 document.querySelectorAll("[data-page]").forEach(link => {
@@ -218,6 +220,7 @@ document.querySelectorAll("[data-page]").forEach(link => {
     showPage(link.dataset.page);
   });
 });
+
 
 async function loadLiveCams() {
   const container = $("liveContainer");
