@@ -192,6 +192,33 @@ function applySearch() {
   }
 }
 
+function showPage(page) {
+  document.querySelectorAll(".page-section").forEach(section => {
+    section.classList.toggle("hidden", section.id !== page);
+  });
+
+  document.querySelectorAll("[data-page]").forEach(link => {
+    const active = link.dataset.page === page;
+
+    link.classList.toggle("active", active);
+
+    if (active) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.querySelectorAll("[data-page]").forEach(link => {
+  link.addEventListener("click", event => {
+    event.preventDefault();
+    showPage(link.dataset.page);
+  });
+});
+
 async function loadLiveCams() {
   const container = $("liveContainer");
   const button = $("refreshLive");
@@ -207,8 +234,22 @@ async function loadLiveCams() {
   : Array.isArray(data.models) ? data.models
   : Array.isArray(data.results) ? data.results
   : Array.isArray(data.data) ? data.data
-  : Array.isArray(data.camsfeed) ? data.camsfeed : [];
+  : Array.isArray(data.camsfeed) ? data.camsfeed
+  : [];
     state.live = items.map(normaliseCam).filter(cam => cam.username);
+    const liveNavImage = $("liveNavImage");
+const liveNavFallback = $("liveNavFallback");
+
+const firstLiveImage = state.live.find(cam => cam.image)?.image || "";
+
+if (liveNavImage && firstLiveImage) {
+  liveNavImage.src = firstLiveImage;
+  liveNavImage.hidden = false;
+
+  if (liveNavFallback) {
+    liveNavFallback.hidden = true;
+  }
+}
     container.replaceChildren();
     state.live.slice(0, 40).forEach(cam => container.appendChild(liveCard(cam)));
     setStatus("liveStatus", state.live.length ? `${state.live.length} live listings found.` : "No live listings were returned by the feed.");

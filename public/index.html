@@ -13,9 +13,19 @@
   <header class="site-header">
     <a class="brand" href="#" aria-label="Bakulu home">BAKULU</a>
     <nav class="main-nav" aria-label="Main navigation">
-      <a href="#live">Live</a>
-      <a href="#videos">Videos</a>
-    </nav>
+  <a href="#videos" class="nav-link active" data-page="videos">
+    Videos
+  </a>
+
+  <a href="#live" class="live-nav" data-page="live"
+     aria-label="Open live streams">
+    <span class="live-avatar-ring">
+      <img id="liveNavImage" alt="Live preview" hidden>
+      <span id="liveNavFallback">LIVE</span>
+    </span>
+    <span>Live</span>
+  </a>
+</nav>
   </header>
 
   <main>
@@ -31,31 +41,45 @@
       </label>
     </section>
 
-    <section id="live" class="content-section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">HAPPENING NOW</p>
-          <h2><span class="live-dot"></span> Live streams</h2>
-        </div>
-        <button id="refreshLive" class="text-button" type="button">Refresh ↻</button>
-      </div>
-      <p id="liveStatus" class="status-message" role="status">Loading live streams…</p>
-      <div id="liveContainer" class="live-grid"></div>
-    </section>
+    <section id="videos" class="content-section page-section">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">WATCH AT YOUR PACE</p>
+      <h2>Videos</h2>
+    </div>
+  </div>
 
-    <section id="videos" class="content-section">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">WATCH AT YOUR PACE</p>
-          <h2>Videos</h2>
-        </div>
-      </div>
-      <p id="videoStatus" class="status-message" role="status">Loading videos…</p>
-      <div id="videoContainer" class="video-grid"></div>
-      <div class="load-more-wrap">
-        <button id="loadMoreVideos" class="load-more-button" type="button">Load more videos ›</button>
-      </div>
-    </section>
+  <p id="videoStatus" class="status-message" role="status">
+    Loading videos…
+  </p>
+
+  <div id="videoContainer" class="video-grid"></div>
+
+  <div class="load-more-wrap">
+    <button id="loadMoreVideos" class="load-more-button" type="button">
+      Load more videos ›
+    </button>
+  </div>
+</section>
+
+<section id="live" class="content-section page-section hidden">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">HAPPENING NOW</p>
+      <h2><span class="live-dot"></span> Live streams</h2>
+    </div>
+
+    <button id="refreshLive" class="text-button" type="button">
+      Refresh ↻
+    </button>
+  </div>
+
+  <p id="liveStatus" class="status-message" role="status">
+    Loading live streams…
+  </p>
+
+  <div id="liveContainer" class="live-grid"></div>
+</section>
   </main>
 
   <footer class="site-footer">BAKULU <span>Videos &amp; Live</span></footer>
