@@ -59,22 +59,66 @@ function clampInteger(value, fallback, min, max) {
   return Math.max(min, Math.min(max, number));
 }
 
+
 async function proxyJson(url, options = {}) {
   try {
     const response = await fetch(url, {
       ...options,
       redirect: "follow",
-      cf: { cacheTtl: 30, cacheEverything: true }
+      cf: { cacheTtl: 0, cacheEverything: false }
     });
-    const contentType = response.headers.get("content-type") || "";
+
+    const contentType =
+      response.headers.get("content-type") || "";
+
     const bodyText = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(bodyText);
+    } catch {
+      data = null;
+    }
 
     if (!response.ok) {
       return json({
         error: "Upstream provider returned an error",
-        upstream_status: response.status
+        upstream_status: response.status,
+        upstream_content_type: contentType,
+        upstream_final_url: response.url
       }, 502);
     }
+
+    if (data === null) {
+      return json({
+        error: "Provider returned HTML or invalid JSON",
+        upstream_status: response.status,
+        upstream_content_type: contentType,
+        upstream_final_url: response.url,
+        hint: "Check whether the provider requires approved API access."
+      }, 502);
+    }
+
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Access-Control-Allow-Origin": "*",
+        "X-Content-Type-Options": "nosniff"
+      }
+    });
+  } catch (error) {
+    return json({
+      error: "Could not contact upstream provider",
+      message: error instanceof Error
+        ? error.message
+        : "Unknown network error"
+    }, 502);
+  }
+}
+
 
     // Some providers return an HTML challenge page instead of JSON.
     if (!contentType.toLowerCase().includes("json")) {
