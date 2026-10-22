@@ -57,7 +57,15 @@ function setStatus(id, message) {
 
 function normaliseVideo(item) {
   const id = safeText(item.id || item.video_id || item.videoId).trim();
-  const title = firstString(item.title, item.name, item.keyword) || "Untitled video";
+  const fullTitle = firstString(
+  item.title,
+  item.name,
+  item.keyword
+) || "Untitled video";
+
+const title = fullTitle.length > 25
+  ? fullTitle.slice(0, 22).trimEnd() + "..."
+  : fullTitle;
   const image = safeHttpUrl(firstString(
     item.image, item.default_thumb && item.default_thumb.src, item.thumb,
     item.thumbnail, item.thumb_url, item.thumbnail_url, item.poster

@@ -234,3 +234,12 @@ h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.5px; }
     font-size: 10px;
   }
 }
+/* Compact top area: search bar only */
+.intro {
+  padding: 18px 16px;
+  background: var(--bg);
+}
+
+.search-wrap {
+  width: min(100%, 540px);
+}
