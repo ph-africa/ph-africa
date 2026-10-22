@@ -3,7 +3,7 @@
 "use strict";
 
 const API = {
-  videos: "/api/videos",
+  videos: "https://www.eporner.com/api/v2/video/search/",
   live: "/api/livecams"
 };
 
@@ -228,8 +228,14 @@ async function loadVideos() {
   button.textContent = "Loading videos…";
   setStatus("videoStatus", "Loading videos…");
   try {
-    const url = `${API.videos}?page=${state.videoPage}&per_page=${state.perPage}`;
-    const response = await fetch(url, { headers: { "Accept": "application/json" } });
+    const url = new URL(API.videos);
+url.searchParams.set("query", "all");
+url.searchParams.set("page", String(state.videoPage));
+url.searchParams.set("per_page", String(state.perPage));
+url.searchParams.set("format", "json");
+    const response = await fetch(url.toString(), {
+  headers: { "Accept": "application/json" }
+});
     if (!response.ok) throw new Error(`Video API returned ${response.status}`);
     const data = await response.json();
     const items = Array.isArray(data.videos) ? data.videos
