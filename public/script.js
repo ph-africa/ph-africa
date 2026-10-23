@@ -4,7 +4,7 @@
 
 const API = {
   videos: "https://www.eporner.com/api/v2/video/search/",
-  live: "/api/livecams"
+  live: "https://api.a00s.net/v3/cache/affiliates/camsfeed/json"
 };
 
 const state = {
