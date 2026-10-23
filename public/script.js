@@ -3,7 +3,7 @@
 "use strict";
 
 const API = {
-  videos: "/api/videos",
+  videos: "https://www.eporner.com/api/v2/video/search/",
   live: "/api/livecams"
 };
 
