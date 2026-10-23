@@ -771,3 +771,23 @@ main {
   }
 }
 
+/* Keep mobile scrolling smooth and prevent double-tap zoom */
+html {
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  touch-action: pan-x pan-y;
+  overscroll-behavior-y: contain;
+}
+
+/* Prevent double-tap zoom on interactive controls */
+button,
+a,
+input,
+select,
+textarea {
+  touch-action: manipulation;
+}
+
