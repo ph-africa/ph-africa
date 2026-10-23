@@ -210,12 +210,20 @@ function liveCard(cam) {
       <p class="card-subtitle">${viewers ? escapeHtml(viewers) : "Live now"}</p>
       <button class="card-action" type="button">Watch live</button>
     </div>`;
-  const play = () => openPlayer({
-    title: `${cam.username} — Live`,
-    embed: cam.embed,
-    page: cam.page,
-    kind: "live"
-  });
+  
+const play = () => {
+  if (cam.embed) {
+    openPlayer({
+      title: `${cam.username} — Live`,
+      embed: cam.embed,
+      page: cam.page,
+      kind: "live"
+    });
+  } else if (cam.page) {
+    window.open(cam.page, "_blank", "noopener,noreferrer");
+  }
+};
+
   card.querySelector(".thumb-button").addEventListener("click", play);
   card.querySelector(".card-action").addEventListener("click", play);
   card.dataset.searchText = `${cam.username} live ${cam.viewers}`.toLowerCase();
