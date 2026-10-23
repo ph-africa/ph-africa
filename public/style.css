@@ -655,3 +655,119 @@ h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.5px; }
   }
 }
 
+/* FIX: Bakulu header and live avatar overlap */
+.site-header {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 68px;
+  min-height: 68px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+/* Keep navigation items inside the header */
+.main-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 22px;
+  height: 100%;
+  margin-left: auto;
+}
+
+/* Prevent the live link from stretching */
+.live-nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+/* Fix the circular live image */
+.live-avatar-ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin: 0;
+  transform: none;
+}
+
+#liveNavImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+#liveNavImage[hidden] {
+  display: none;
+}
+
+#liveNavFallback {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Keep the content below the header */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+.intro {
+  position: relative;
+  margin-top: 0;
+  padding-top: 8px;
+}
+
+/* Smaller, contained header on phones */
+@media (max-width: 620px) {
+  .site-header {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 10px;
+    gap: 8px;
+  }
+
+  .main-nav {
+    gap: 12px;
+  }
+
+  .live-nav {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .live-avatar-ring {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+  }
+
+  .intro {
+    padding-top: 6px;
+  }
+}
+
