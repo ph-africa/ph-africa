@@ -121,32 +121,51 @@ function createCardImage(imageUrl, altText, placeholderText = "Preview unavailab
   return `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(altText)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'thumb-placeholder',textContent:'Preview unavailable'}))">`;
 }
 
+
 function openPlayer({ title, embed, page, kind }) {
   const modal = $("playerModal");
   const frame = $("playerFrame");
   const providerLink = $("openProvider");
-  if (!modal || !frame) return;
+
+  if (!modal || !frame || !providerLink) return;
 
   $("playerTitle").textContent = title || "Now playing";
   providerLink.hidden = true;
   providerLink.removeAttribute("href");
 
-  if (embed) {
-    frame.src = embed;
-    $("playerHelp").textContent = "If playback is blocked, the provider may not allow embedded playback.";
+  // Use the official Amateur.tv affiliate room for live streams.
+  if (kind === "live") {
+    frame.src =
+      "https://l.amateur.tv/streamroom?base_domain=" +
+      encodeURIComponent("https://www.amateur.tv/") +
+      "&a=b05a029d-18d1-461b-a229-40f9bf7f44c3&noHud=1";
+
+    $("playerHelp").textContent =
+      "Live room provided by Amateur.tv.";
+
     if (page) {
       providerLink.href = page;
+      providerLink.textContent = "Open this profile on Amateur.tv ↗";
+      providerLink.hidden = false;
+    }
+  } else if (embed) {
+    frame.src = embed;
+    $("playerHelp").textContent =
+      "If playback is blocked, the provider may not allow embedded playback.";
+
+    if (page) {
+      providerLink.href = page;
+      providerLink.textContent = "Open on provider ↗";
       providerLink.hidden = false;
     }
   } else {
     frame.src = "about:blank";
-    $("playerHelp").textContent = page
-      ? "This feed did not provide an embeddable player URL. Use the provider link to watch there."
-      : (kind === "live"
-          ? "This live feed did not provide an embeddable player or a stream page, so playback cannot be opened yet."
-          : "This video did not provide an embed URL. Try opening it on the provider if a page link is available.");
+    $("playerHelp").textContent =
+      "An embedded player is not available for this video.";
+
     if (page) {
       providerLink.href = page;
+      providerLink.textContent = "Open on provider ↗";
       providerLink.hidden = false;
     }
   }
@@ -155,6 +174,7 @@ function openPlayer({ title, embed, page, kind }) {
   document.body.style.overflow = "hidden";
   $("closePlayer").focus();
 }
+
 
 
 function closePlayer() {
