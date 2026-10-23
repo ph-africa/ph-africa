@@ -159,19 +159,28 @@
 
   <footer class="site-footer">BAKULU <span>Videos &amp; Live</span></footer>
 
-  <div id="playerModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Video player">
+    <div id="playerModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Video player">
     <div class="modal-panel">
       <div class="modal-topbar">
         <p id="playerTitle">Now playing</p>
         <button id="closePlayer" class="close-button" type="button" aria-label="Close player">×</button>
       </div>
+
       <div class="player-frame-wrap">
-        <iframe id="playerFrame" title="Video player" src="about:blank"
+        <iframe
+          id="playerFrame"
+          title="Video player"
+          src="about:blank"
           allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-          allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
       </div>
-      <p id="playerHelp" class="player-help">If playback is unavailable, the provider may not allow embedded playback.</p>
-      <a id="openProvider" class="provider-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Open on provider ↗</a>
+
+      <div class="player-details">
+        <p id="playerHelp" class="player-help">If playback is unavailable, the provider may not allow embedded playback.</p>
+        <a id="openProvider" class="provider-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Open on provider ↗</a>
+      </div>
     </div>
   </div>
 </body>

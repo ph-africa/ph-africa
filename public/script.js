@@ -126,11 +126,17 @@ function openPlayer({ title, embed, page, kind }) {
   $("closePlayer").focus();
 }
 
+
 function closePlayer() {
-  $("playerFrame").src = "about:blank";
-  $("playerModal").classList.add("hidden");
+  const frame = $("playerFrame");
+  const modal = $("playerModal");
+
+  if (frame) frame.src = "about:blank";
+  if (modal) modal.classList.add("hidden");
+
   document.body.style.overflow = "";
 }
+
 
 function videoCard(video) {
   const card = document.createElement("article");
