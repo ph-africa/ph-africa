@@ -76,15 +76,45 @@ const title = fullTitle.length > 25
   return { id, title, image, duration, embed, page };
 }
 
+
 function normaliseCam(item) {
-  const username = firstString(item.username, item.model, item.name, item.nickname) || "Live stream";
-  const image = safeHttpUrl(firstString(item.image_url, item.image, item.thumbnail, item.thumb, item.photo));
+  const username = firstString(
+    item.username,
+    item.model,
+    item.name,
+    item.nickname
+  ) || "Live stream";
+
+  const image = safeHttpUrl(firstString(
+    item.image,
+    item.image_url,
+    item.imageCapture,
+    item.thumbnail,
+    item.thumb,
+    item.photo
+  ));
+
   const viewers = item.viewers ?? item.viewer_count ?? item.num_viewers ?? "";
-  // Only use a provider-supplied player/embed URL. Do not guess a live-player URL.
-  const embed = safeHttpUrl(firstString(item.embed_url, item.embed, item.player_url, item.iframe_url));
-  const page = safeHttpUrl(firstString(item.url, item.link, item.profile_url, item.room_url, item.chat_url));
+
+  // The feed provides a profile URL, not a confirmed player URL.
+  const embed = safeHttpUrl(firstString(
+    item.embed_url,
+    item.player_url,
+    item.iframe_url,
+    item.embed
+  ));
+
+  const page = safeHttpUrl(firstString(
+    item.url,
+    item.profile_url,
+    item.room_url,
+    item.chat_url,
+    item.link
+  ));
+
   return { username, image, viewers, embed, page };
 }
+
 
 function createCardImage(imageUrl, altText, placeholderText = "Preview unavailable") {
   if (!imageUrl) return `<div class="thumb-placeholder">${escapeHtml(placeholderText)}</div>`;
