@@ -394,3 +394,38 @@ h2 { margin: 0; font-size: clamp(20px, 3vw, 27px); letter-spacing: -.5px; }
     transition: none;
   }
 }
+.video-categories {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.video-categories::-webkit-scrollbar {
+  display: none;
+}
+
+.category-button {
+  flex: 0 0 auto;
+  padding: 9px 16px;
+  border: 1px solid #303039;
+  border-radius: 22px;
+  background: #17171d;
+  color: #ddd;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.category-button:hover {
+  border-color: #f04452;
+}
+
+.category-button.active {
+  background: #f04452;
+  border-color: #f04452;
+  color: #fff;
+}

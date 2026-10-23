@@ -51,6 +51,23 @@ export default {
       apiUrl.searchParams.set("page", String(page));
       apiUrl.searchParams.set("format", "json");
 
+// Allow only supported sorting options
+const allowedOrders = [
+  "latest",
+  "most-popular",
+  "top-rated",
+  "top-weekly",
+  "top-monthly"
+];
+
+const requestedOrder = url.searchParams.get("order") || "latest";
+
+const order = allowedOrders.includes(requestedOrder)
+  ? requestedOrder
+  : "latest";
+
+apiUrl.searchParams.set("order", order);
+
       return proxyJson(apiUrl.toString(), {
         headers: {
           Accept: "application/json",

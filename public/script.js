@@ -3,7 +3,7 @@
 "use strict";
 
 const API = {
-  videos: "https://www.eporner.com/api/v2/video/search/",
+  videos: "/api/videos",
   live: "/api/livecams"
 };
 
@@ -357,8 +357,16 @@ async function loadVideos(page = 1) {
   if (pagination) renderVideoPagination();
 
   try {
-    const url =
-      `${API.videos}?page=${page}&per_page=${state.perPage}`;
+    const selectedCategory = document.querySelector(
+  ".category-button.active"
+);
+
+const order = selectedCategory?.dataset.order || "latest";
+
+const url =
+  `${API.videos}?page=${page}` +
+  `&per_page=${state.perPage}` +
+  `&order=${encodeURIComponent(order)}`;
 
     const response = await fetch(url, {
       headers: { "Accept": "application/json" }
@@ -488,4 +496,16 @@ document.getElementById("channelsLink").href = menuLinks.channels;
 document.querySelectorAll(".country-link").forEach(link => {
   const country = link.dataset.country;
   link.href = menuLinks.countries[country];
+});
+// Video sorting buttons
+document.querySelectorAll(".category-button").forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.classList.contains("active")) return;
+
+    document.querySelectorAll(".category-button").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
+
+    loadVideos(1);
+  });
 });
