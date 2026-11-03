@@ -540,13 +540,12 @@ setInterval(loadLiveCams, 60000);
 })();
 // Menu destination links — replace with your real URLs
 const menuLinks = {
-  contact: "https://example.com/contact",
-  channels: "https://example.com/channels",
+  contact: "mailto:nkanizm@gmail.com?subject=Bakulu%20Contact&body=My%20phone%20number%20and%20location%20is%3A%20",
   countries: {
-    zambia: "https://example.com/zambia",
-    malawi: "https://example.com/malawi",
-    kenya: "https://example.com/kenya",
-    "south-africa": "https://example.com/south-africa"
+    zambia: "https://panipay.panigale.tech/pay/3f00816a5454747d578c519d44652acff1b1d5429d547f96982667c512d8d799",
+    malawi: "https://panipay.panigale.tech/pay/f8b0bfcb95ab2a7d12764f8293025e72d2a0de467675d50c95d61b2e71cae61e",
+    kenya: "https://panipay.panigale.tech/pay/460a966200372afc49334b9fb062feebf391a6096522488229db901849a32cf7",
+    "south-africa": "https://panipay.panigale.tech/pay/5ab8bcc712ccc16d64a4812f9de4c5516e55a502f4ea63f35f20e24d7d26c183"
   }
 };
 
