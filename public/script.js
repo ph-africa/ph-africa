@@ -550,11 +550,15 @@ const menuLinks = {
 };
 
 document.getElementById("contactLink").href = menuLinks.contact;
-document.getElementById("channelsLink").href = menuLinks.channels;
-
-document.querySelectorAll(".country-link").forEach(link => {
+document.querySelectorAll("[data-country]").forEach(link => {
   const country = link.dataset.country;
-  link.href = menuLinks.countries[country];
+  const destination = menuLinks.countries[country];
+
+  if (destination) {
+    link.href = destination;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+  }
 });
 // Video sorting buttons
 document.querySelectorAll(".category-button").forEach(button => {
